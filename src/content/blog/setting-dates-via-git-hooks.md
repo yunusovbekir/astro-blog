@@ -10,6 +10,7 @@ tags:
   - FAQ
 description: How to use Git Hooks to set your Created and Modified Dates on AstroPaper
 ---
+
 In this post I will explain how to use the pre-commit Git hook to automate the input of the created (`pubDatetime`) and modified (`modDatetime`) in the AstroPaper blog theme frontmatter
 
 ## Table of contents
@@ -54,7 +55,7 @@ while read _ file; do
   fi
   if [ "$draft" = "first" ]; then
     echo "First release of $file, draft set to false and modDateTime removed"
-    cat $file | sed "/---.*/,/---.*/s/^modDatetime:.*$/modDatetime:/" | sed "/---.*/,/---.*/s/^draft:.*$/draft: false/" > tmp
+    cat $file | sed "/---.*/,/---.*/s/^modDatetime:.*$/modDatetime:/" | sed "/---.*/,/---.*/s/^draft:.*$/draft: true/" > tmp
     mv tmp $file
     git add $file
   fi
@@ -128,8 +129,6 @@ We could use the `a` variable to switch inside the loop and either update the `m
 
 If your IDE supports snippets then there is the option to create a custom snippet to populate the frontmatter.[In AstroPaper v4 will come with one for VSCode by default.](https://github.com/satnaing/astro-paper/pull/206)
 
-
-
 ## Empty `modDatetime` changes
 
 To allow Astro to compile the markdown and do its thing, it needs to know what is expected in the frontmatter. It does this via the config in `src/content/config.ts`
@@ -178,8 +177,6 @@ export interface Props {
 }
 ```
 
-
-
 2. added `| null` to line 5 in `src/components/Datetime.tsx` so that it looks like
 
 ```typescript
@@ -188,4 +185,3 @@ interface DatetimesProps {
   modDatetime: string | Date | undefined | null;
 }
 ```
-
